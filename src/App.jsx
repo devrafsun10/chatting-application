@@ -1,5 +1,6 @@
 
 import './App.css'
+import Login from './components/page/Login'
 import Registration from './components/Page/Registration'
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
   return (
     <>
     <Registration/>
+    <Login/>
     </>
   )
 }

@@ -1,6 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import registration from '../../assets/registration.png'
 const Registration = () => {
+
+  const [email, setEmail] = useState("")
+  const [fullName, setFullName] = useState("")
+  const [password , setPassword] = useState("")
+
+  const [emailError, setEmailError] = useState("")
+  const [fullNameError, setFullNameError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError("");
+  }
+
+  const handleFullName = (e) => {
+    setFullName(e.target.value);
+    setFullNameError("");
+    
+
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError("");
+    
+  }
+  
+  const handleSignup = () => {
+    console.log(email);
+    if(!email){
+      setEmailError("Email is required")
+    }else{
+      if(!/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)){
+        setEmailError("Please enter a valid email address");
+      }
+    }
+
+    console.log(fullName);
+    
+    if(!fullName){
+      setFullNameError("Full Name is required")
+    }
+    if(!password){
+      setPasswordError("Password is required");      
+    }else{
+      if(!/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(password)){
+        setPasswordError("Password must be at least 6 characters and contain at least two of the following: uppercase letters, lowercase letters, numbers");
+      }
+      // if(!/(?=.*[a-z])/.test(password)){
+      //   setPasswordError("Password must conatain at least one Lowercase letter");
+      // }else if(!/(?=.*[A-Z])/.test(password)){
+      //   setPasswordError("Password must contain at least one Uppercase Letter ");
+      // }else if(!/(?=.*[0-9])/.test(password)){
+      //   setPasswordError("Password must contain at least one Digit");
+      // }else if(!/(?=.*[!@#$%^&*])/.test(password)){
+      //   setPasswordError("Password must contain at least one special character");
+      // }else if(!/(?=.{8,})/.test(password)){
+      //   setPasswordError("Password must be at least 8 characters long");
+      // }
+      console.log(email,fullName,password);
+    }       
+  }
+
   return (
     <div className='flex items-center '>
         <div className='w-1/2'>
@@ -11,24 +74,32 @@ const Registration = () => {
         <div className=' relative w-[368px]'>
             <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Email Address</p>
             <input type="email"
+            onChange={handleEmail}
+            value={email}
             className='w-full py-[20px] pr-[66px] pl-[30px] border-2 border-[#B8BACF] rounded-[8px] outline-none'
             placeholder='Email Address' />
+            <p className='mt-[10px] font-primary font-semibold text-[16px] text-rose-600'>{emailError}</p>
             </div>
         <div className=' relative w-[368px] my-[34px]'>
             <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Full Name</p>
             <input type="text"
+            onChange={handleFullName}
             className='w-full py-[20px] pr-[66px] pl-[30px] border-2 border-[#B8BACF] rounded-[8px] outline-none '
             placeholder='Full Name' />
+             <p className='mt-[10px] font-primary font-semibold text-[16px] text-rose-600'>{fullNameError}</p>
             </div>
         <div className=' relative w-[368px]'>
             <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Password</p>
             <input type="text"
+            onChange={handlePassword}
             className='w-full py-[20px] pr-[66px] pl-[30px] border-2 border-[#B8BACF] rounded-[8px] outline-none'
             placeholder='Password' />
+            <p className='mt-[10px] font-primary font-semibold text-[16px] text-rose-600'>{passwordError}</p>
             </div>
             <div className='w-[368px] mt-[30px] '>
-              <button className='bg-[#1E1E1E] rounded-full w-full py-[20px] text-white font-secondary font-semibold text-[20px] relative cursor-pointer'>
-                <span className='z-[50]'>Sign up</span>
+              <button className='bg-[#1E1E1E] rounded-full w-full py-[20px] text-white font-secondary font-semibold text-[20px] relative cursor-pointer' onClick={handleSignup}>
+                
+                <span className=' relative z-[50]'>Sign up</span>
                
                 <span className=' absolute top-1/2 left-1/2 bg-[#5B36F5]/25 w-[78px] h-[40px] -translate-1/2 blur-[10px]'></span>
               </button>
