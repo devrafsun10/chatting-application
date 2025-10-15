@@ -1,8 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import login from '../../assets/login.jpg'
 import google from '../../assets/google.png'
+import { Link } from 'react-router'
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password , setPassword] = useState("")
+
+  const [show,setShow] = useState(false)
+
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+   const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError("");
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError("");
+    
+  }
+
+   const handleLogin = () => {
+    console.log(email);
+    if(!email){
+      setEmailError("Email is required")
+    }else{
+      if(!/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)){
+        setEmailError("Please enter a valid email address");
+      }
+    }
+    
+    if(!password){
+      setPasswordError("Password is required");      
+    }else{
+      if(!/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(password)){
+        setPasswordError("Password must be at least 6 characters and contain at least two of the following: uppercase letters, lowercase letters, numbers");
+      }
+      console.log(email,password);
+    }       
+  }
+
   return (
      <div className='flex items-center '>
             <div className='w-1/2'>
@@ -13,23 +55,38 @@ const Login = () => {
             <div className=' relative w-[368px]'>
                 <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Email Address</p>
                 <input type="email"
-                className='w-full py-[20px] pr-[66px] pl-[30px] border-b-2 border-[#B8BACF] rounded-[8px] mb-[60px] outline-none'
+                 onChange={handleEmail}
+                 value={email}
+                className='w-full py-[20px] pr-[66px] pl-[30px] border-b-2 border-[#B8BACF] rounded-[8px] outline-none'
                 placeholder='Your Email Address' />
+                 <p className='mt-[0px] mb-3 font-primary font-semibold text-[16px] text-rose-600'>{emailError}</p>               
                 </div>
-            <div className=' relative w-[368px]'>
+                 
+            <div className=' relative w-[368px]  mt-[30px]'>
                 <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Password</p>
-                <input type="text"
+                <input 
+                type={ show ? "text" : "password"}
+                onChange={handlePassword}
                 className='w-full py-[20px] pr-[66px] pl-[30px] border-b-2 border-[#B8BACF] rounded-[8px] outline-none'
                 placeholder='Password' />
+                <div onClick={()=>setShow(!show)} className=' absolute top-[25px] right-[5%] items-center cursor-pointer'>
+              { show ? <FaEye  /> : <FaEyeSlash/>}
+               </div>
+                <p className='mt-[10px] font-primary font-semibold text-[16px] text-rose-600'>{passwordError}</p>
                 </div>
                 <div className='w-[368px] mt-[30px] '>
-                  <button className='bg-[#1E1E1E] rounded-full w-full py-[20px] text-white font-secondary font-semibold text-[20px] relative cursor-pointer'>
+                  <button className='bg-[#1E1E1E] rounded-full w-full py-[20px] text-white font-secondary font-semibold text-[20px] relative cursor-pointer'
+                  onClick={handleLogin}>
                     <span className=' relative z-[50]'>Login to Continue</span>
                    
                     <span className=' absolute top-1/2 left-1/2 bg-[#5B36F5]/25 w-[179px] h-[40px] -translate-1/2 blur-[10px]'></span>
                   </button>
     
-                   <p className=' text-center mt-[10px] font-primary font-normal text-[13px] text-[#03014C]'>Don’t have an account ? <span className='font-bold text-[#EA6C00] cursor-pointer'>Sign I n</span></p>
+                   <p className=' text-center mt-[10px] font-primary font-normal text-[13px] text-[#03014C]'>Don’t have an account ? 
+                   <Link to="/registration">
+                    <span className='font-bold text-[#EA6C00] cursor-pointer'>Sign In</span>
+                    </Link>
+                    </p>
     
                 </div>
                 
