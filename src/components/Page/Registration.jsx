@@ -5,10 +5,12 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { Bars } from 'react-loader-spinner'
 
 
 const Registration = () => {
 
+  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [fullName, setFullName] = useState("")
   const [password , setPassword] = useState("")
@@ -75,6 +77,7 @@ const Registration = () => {
       console.log(email,fullName,password);
     } 
     if(email && fullName && password && /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)){
+      setLoading(true)
       const auth = getAuth();
 
        createUserWithEmailAndPassword(auth, email, password)
@@ -95,15 +98,15 @@ const Registration = () => {
       const errorCode = error.code;
       
       const errorMessage = error.message;
-      // toast.error(errorCode)
+
       console.log(errorMessage);
-      
-      // ..
+
       toast.error("This email is already registered")
 
        if(errorCode == "auth/email-already-in-use"){
         setEmailError("This email is already registered")
       }
+      setLoading(false)
 
   });
     }      
@@ -159,7 +162,22 @@ transition={Bounce}
             </div>
             <p className='mt-[10px] font-primary font-semibold text-[16px] text-rose-600'>{passwordError}</p>
             </div>
-            <div className='w-[368px] mt-[30px] '>
+           <div>
+            { loading ?
+            (
+               <div className='w-[368px] mt-[30px] flex justify-center '>
+                <Bars
+                height="80"
+                width="80"
+                color="#4fa94d"
+                ariaLabel="bars-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                 />              
+            </div>
+            ) : (
+               <div className='w-[368px] mt-[30px] '>
               <button className='bg-[#1E1E1E] rounded-full w-full py-[20px] text-white font-secondary font-semibold text-[20px] relative cursor-pointer' 
               onClick={handleSignup}>
                 
@@ -176,6 +194,8 @@ transition={Bounce}
                </p>
 
             </div>
+            )}
+           </div>
             
         </div>
             
