@@ -92,13 +92,19 @@ const Registration = () => {
          // ...
          })
      .catch((error) => {
-      // const errorCode = error.code;
-      toast.error("This email is already registered")
+      const errorCode = error.code;
+      
       const errorMessage = error.message;
       // toast.error(errorCode)
       console.log(errorMessage);
       
       // ..
+      toast.error("This email is already registered")
+
+       if(errorCode == "auth/email-already-in-use"){
+        setEmailError("This email is already registered")
+      }
+
   });
     }      
   }
