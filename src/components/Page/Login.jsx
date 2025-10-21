@@ -4,8 +4,12 @@ import google from '../../assets/google.png'
 import { Link } from 'react-router'
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState("")
   const [password , setPassword] = useState("")
 
@@ -42,16 +46,60 @@ const Login = () => {
         setPasswordError("Password must be at least 6 characters and contain at least two of the following: uppercase letters, lowercase letters, numbers");
       }
       console.log(email,password);
-    }       
+    }
+    
+    if(email && password && /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)){
+      signInWithEmailAndPassword(auth, email, password)
+  .then((user) => {
+
+    console.log(user,"login");
+    toast.success("Login Successful")  
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    console.log(errorCode);
+    
+    if(errorCode.includes("auth/invalid-credential")){
+      toast.error("Please provide right email and password")
+    }
+  });
+    }
+    
+  }
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider)
+  .then((user) => {
+    console.log(user);
+    toast.success("Login Successful") 
+    
+  }).catch((error) => {
+    const errorCode = error.code;
+  console.log(errorCode);
+  
+  });
   }
 
   return (
      <div className='flex items-center '>
+        <ToastContainer
+      position="top-center"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick={false}
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+      transition={Bounce}
+      />
             <div className='w-1/2'>
             <div className='flex justify-end mr-[70px]'>
                 <div>
                     <h3 className='font-secondary font-bold text-[34px] text-[#11175D]'>Login to your account!</h3>  
-            <img className=' mt-[13px] mb-[40px] cursor-pointer' src={google} alt="#google" /> 
+            <img className=' mt-[13px] mb-[40px] cursor-pointer' onClick={handleGoogleSignIn} src={google} alt="#google" /> 
             <div className=' relative w-[368px]'>
                 <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Email Address</p>
                 <input type="email"
@@ -82,9 +130,13 @@ const Login = () => {
                     <span className=' absolute top-1/2 left-1/2 bg-[#5B36F5]/25 w-[179px] h-[40px] -translate-1/2 blur-[10px]'></span>
                   </button>
     
+                   <Link to="/forgotpassword">
+                   <p className=' text-center mt-[10px] font-primary font-bold text-[13px] text-[#EA6C00] cursor-pointer '>Forgot Password ? 
+                    </p>
+                    </Link>
                    <p className=' text-center mt-[10px] font-primary font-normal text-[13px] text-[#03014C]'>Don’t have an account ? 
                    <Link to="/registration">
-                    <span className='font-bold text-[#EA6C00] cursor-pointer'>Sign In</span>
+                    <span className='font-bold text-[#EA6C00] cursor-pointer'>Sign Up</span>
                     </Link>
                     </p>
     

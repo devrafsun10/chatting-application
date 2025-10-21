@@ -3,9 +3,10 @@ import registration from '../../assets/registration.png'
 import { Link, useNavigate } from 'react-router'
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import { Bars } from 'react-loader-spinner'
+
 
 
 const Registration = () => {
@@ -82,6 +83,7 @@ const Registration = () => {
 
        createUserWithEmailAndPassword(auth, email, password)
          .then((user) => {
+          sendEmailVerification(auth.currentUser)
           toast.success("Registration Successful !")
           console.log(user,"user");
 
@@ -108,7 +110,11 @@ const Registration = () => {
       }
       setLoading(false)
 
-  });
+  }).finally(()=>{
+    setEmail("")
+    setFullName("")
+    setPassword("")
+  })
     }      
   }
 
@@ -143,7 +149,9 @@ transition={Bounce}
             </div>
         <div className=' relative w-[368px] my-[34px]'>
             <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Full Name</p>
-            <input type="text"
+            <input
+            value={fullName}
+            type="text"
             onChange={handleFullName}
             className='w-full py-[20px] pr-[66px] pl-[30px] border-2 border-[#B8BACF] rounded-[8px] outline-none '
             placeholder='Full Name' />
@@ -152,6 +160,7 @@ transition={Bounce}
         <div className=' relative w-[368px]'>
             <p className='absolute top-[-10px] left-[20px] px-3 bg-white tracking-[2px] font-secondary text-[13px] text-[#11175D] font-semibold'>Password</p>
             <input 
+            value={password}
             type={ show ? "text" : "password"}
             onChange={handlePassword}
             className=' w-full py-[20px] pr-[66px] pl-[30px] border-2 border-[#B8BACF] rounded-[8px] outline-none'
