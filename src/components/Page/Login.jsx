@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import login from '../../assets/login.jpg'
 import google from '../../assets/google.png'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { userInfo } from '../../slices/userSlice';
 
 const Login = () => {
   const auth = getAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
   const [email, setEmail] = useState("")
   const [password , setPassword] = useState("")
@@ -51,9 +55,13 @@ const Login = () => {
     if(email && password && /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)){
       signInWithEmailAndPassword(auth, email, password)
   .then((user) => {
-
     console.log(user,"login");
-    toast.success("Login Successful")  
+    dispatch(userInfo(user.user))
+    localStorage.setItem("userInfo", JSON.stringify(user))
+    setTimeout(()=>{
+      navigate("/")
+    }, 2000)
+    toast.success("Login Successful")
   })
   .catch((error) => {
     const errorCode = error.code;
