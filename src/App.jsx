@@ -6,6 +6,8 @@ import Registration from './components/Page/Registration'
 import firebaseConfig from "./components/firebase/firebaseConfig";
 import ForgotPassword from "./components/page/ForgotPassword";
 import Home from "./components/page/Home";
+import Sidebar from "./components/page/Sidebar";
+import Grouplist from "./components/page/Grouplist";
 
 function App() {
  
@@ -25,6 +27,14 @@ function App() {
   {
     path: "/forgotpassword",
     element: <ForgotPassword/>,
+  },
+  {
+    path: "/sidebar",
+    element: <Sidebar/>,
+  },
+  {
+    path: "/grouplist",
+    element: <Grouplist/>,
   },
 ]);
 
